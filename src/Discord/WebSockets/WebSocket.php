@@ -230,7 +230,7 @@ class WebSocket extends EventEmitter
             [$this, 'handleWebSocketError']
         );
 
-        if (! is_null($flush)) {
+        if (!is_null($flush)) {
             $loop->addPeriodicTimer($flush, function () {
                 foreach ($this->discord->guilds as $guild) {
                     foreach ($guild->channels->getAll('type', 'text') as $channel) {
@@ -272,13 +272,13 @@ class WebSocket extends EventEmitter
             $data = json_decode($data);
             $this->emit('raw', [$data, $this->discord]);
 
-            if (isset($data->s) && ! is_null($data->s)) {
+            if (isset($data->s) && !is_null($data->s)) {
                 $this->seq = $data->s;
             }
 
             switch ($data->op) {
                 case Op::OP_DISPATCH:
-                    if (! is_null($handlerSettings = $this->handlers->getHandler($data->t))) {
+                    if (!is_null($handlerSettings = $this->handlers->getHandler($data->t))) {
                         $this->handleHandler($handlerSettings, $data);
                     }
 
@@ -317,7 +317,7 @@ class WebSocket extends EventEmitter
 
             $this->emit('close', [$op, $reason, $this->discord]);
 
-            if (! is_null($this->heartbeat)) {
+            if (!is_null($this->heartbeat)) {
                 $this->loop->cancelTimer($this->heartbeat);
             }
 
@@ -347,7 +347,7 @@ class WebSocket extends EventEmitter
                 return;
             }
 
-            if (! $this->reconnecting) {
+            if (!$this->reconnecting) {
                 $this->emit('reconnecting', [$this->discord]);
 
                 $this->reconnecting = true;
@@ -427,7 +427,7 @@ class WebSocket extends EventEmitter
      */
     public function handleReady($data)
     {
-        if (! is_null($this->reconnectResetTimer)) {
+        if (!is_null($this->reconnectResetTimer)) {
             $this->loop->cancelTimer($this->reconnectResetTimer);
         }
 
@@ -562,7 +562,7 @@ class WebSocket extends EventEmitter
             });
 
             $handleGuildCreate = function ($guild) use (&$handleGuildCreate) {
-                if (! isset($this->unavailableServers[$guild->id])) {
+                if (!isset($this->unavailableServers[$guild->id])) {
                     return;
                 }
 
@@ -583,7 +583,7 @@ class WebSocket extends EventEmitter
                     if (count($servers) < 1) {
                         $this->removeListener(Event::GUILD_CREATE, $handleGuildCreate);
 
-                        if (! $this->invalidSession) {
+                        if (!$this->invalidSession) {
                             $this->emit('ready', [$this->discord, $this]);
                         } else {
                             $this->invalidSession = false;
@@ -688,7 +688,7 @@ class WebSocket extends EventEmitter
                     break;
                 }
 
-                if (count($this->largeServers) === 0 && ! $this->emittedReady) {
+                if (count($this->largeServers) === 0 && !$this->emittedReady) {
                     $this->largeServers = true;
                     $this->emit('ready', [$this->discord, $this]);
                 }
@@ -902,7 +902,6 @@ class WebSocket extends EventEmitter
         if (!empty($options['shardId']) && !empty($options['shardCount'])) {
             $data['shard_key'] = [$options['shardId'], $options['shardCount']];
         }
-
 
         $this->send(['op' => Op::OP_IDENTIFY, 'd'  => $data]);
     }
